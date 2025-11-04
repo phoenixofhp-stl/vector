@@ -19,25 +19,54 @@ template <typename T> vector<T>::vector(size_t initial_capacity) : size_(0) {
 };
 
 template <typename T>
-vector<T>::vector(const vector &copy_)
+vector<T>::vector(const vector &copy)
     : data_(nullptr), size_(0), capacity_(0) {
-  if (!copy_.empty()) {
-    reallocate(copy_.size());
-    std::copy(copy_.data(), copy_.data() + copy_.size(), this->data());
-    size_ = copy_.size();
+  if (!copy.empty()) {
+    reallocate(copy.size());
+    std::copy(copy.data(), copy.data() + copy.size(), this->data());
+    size_ = copy.size();
   }
 };
 
 template <typename T>
-vector<T>::vector(vector &&move_) noexcept
-    : data_(move_.data_), size_(move_.size_), capacity_(move_.capacity_) {
-  move_.data_ = nullptr;
-  move_.size_ = 0;
-  move_.cap_ = 0;
+vector<T>::vector(vector &&move) noexcept
+    : data_(move.data_), size_(move.size_), capacity_(move.capacity_) {
+  move.data_ = nullptr;
+  move.size_ = 0;
+  move.capacity_ = 0;
 };
 
-// vector &operator=(const vector &copy_);
-// vector &operator=(vector &&move_);
+template <typename T>
+vector<T> &vector<T>::operator=(const vector &copy)
+{
+  if (this != &copy) {
+    delete[] data_;
+    data_ = nullptr;
+    size_ = 0;
+    capacity_ = 0;
+    if (!copy.empty()) {
+      reallocate(copy.size());
+      std::copy(copy.data(), copy.data() + copy.size(), this->data());
+      size_ = copy.size();
+    }
+  }
+  return *this;
+}
+
+template <typename T>
+vector<T> &vector<T>::operator=(vector<T> &&move) noexcept
+{
+  if (this != &move) {
+    delete[] data_;
+    data_ = move.data_;
+    size_ = move.size_;
+    capacity_ = move.capacity_;
+    move.data_ = nullptr;
+    move.size_ = 0;
+    move.capacity_ = 0;
+  }
+  return *this;
+}
 
 template <typename T> void vector<T>::reallocate(size_t new_capacity) {
   T *new_data = new T[new_capacity];
