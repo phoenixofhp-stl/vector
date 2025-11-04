@@ -18,8 +18,8 @@ public:
 
   size_t size() const noexcept { return size_; }
   size_t capacity() const noexcept { return capacity_; }
-  T* data() noexcept { return data_; }
-  const T* data() const noexcept { return data_; }
+  T *data() noexcept { return data_; }
+  const T *data() const noexcept { return data_; }
 
   bool empty() const noexcept { return size_ == 0; }
 
